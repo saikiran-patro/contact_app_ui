@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header">Add Contact</div>
+      <div class="card-body">
+        <form method="post" action="{{ url_for('create_contact') }}" class="row g-2">
+          <div class="col-12">
+            <label class="form-label">Name</label>
+            <input class="form-control" name="name" required />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input class="form-control" type="email" name="email" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Phone</label>
+            <input class="form-control" name="phone" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Company</label>
+            <input class="form-control" name="company" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Address</label>
+            <input class="form-control" name="address" />
+          </div>
+          <div class="col-12">
+            <label class="form-label">Notes</label>
+            <textarea class="form-control" rows="2" name="notes"></textarea>
+          </div>
+          <div class="col-12 d-grid">
+            <button class="btn btn-primary">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mt-4">
+      <div class="card-header">Search</div>
+      <div class="card-body">
+        <form method="get" class="d-flex gap-2">
+          <input class="form-control" name="q" placeholder="Search name, email, phone, company" value="{{ query or '' }}" />
+          <button class="btn btn-outline-secondary">Search</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h5 class="mb-0">Contacts</h5>
+      <span class="text-muted">Total: {{ stats.total }} • With Email: {{ stats.with_email }} • With Phone: {{ stats.with_phone }}</span>
+    </div>
+    {% if contacts %}
+      <div class="list-group">
+        {% for c in contacts %}
+          <a href="{{ url_for('view_contact', contact_id=c.id) }}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1">{{ c.name }}</h6>
+              <small class="text-muted">#{{ c.id }}</small>
+            </div>
+            <small class="text-muted">{{ c.email or '—' }} • {{ c.phone or '—' }} • {{ c.company or '—' }}</small>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-info">No contacts found.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
